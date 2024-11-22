@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<h1 style="margin-bottom: 20px;">실종동물 찾기</h1>
+
+<!-- 실종 동물 찾기 텍스트와 검색창 추가 -->
+<div id="search-container">
+    <div id="writediv">
+        <button id="make-button">게시물 쓰기</button>
+    </div><br>
+
+    <label for="lang">실종동물선택</label>
+    <select name="find_animal" id="find_animal">
+        <option value="강아지">강아지</option>
+        <option value="고양이">고양이</option>
+        <option value="기타동물">기타동물</option>
+    </select><br>
+
+    <label for="lang">지역선택</label>
+    <select name="animal-type" id="animal-type">
+        <option value="서울시">서울시</option>
+        <option value="인천시">인천시</option>
+        <option value="대전시">대전시</option>
+        <option value="광주시">광주시</option>
+        <option value="대구시">대구시</option>
+        <option value="울산시">울산시</option>
+        <option value="부산시">부산시</option>
+        <option value="경기도">경기도</option>
+        <option value="강원시">강원도</option>
+        <option value="세종시">세종시</option>
+        <option value="충청남도">충청남도</option>
+        <option value="경상북도">경상북도</option>
+        <option value="경상남도">경상남도</option>
+        <option value="전라남도">전라남도</option>
+        <option value="전라북도">전라북도</option>
+        <option value="제주도">제주도</option>
+    </select>
+
+    <button id="search-button">검색</button>
+</div>
+<hr style="margin-bottom: 30px;">
+
+<div class="searchbefore"></div>
+
+<div class="pagination" id="pagination-container">
+    <!-- 그 페이지 버튼 여기 생김 -->
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<div id="popup-overlay"></div>
+
+<!-- 회원가입 팝업 -->
+<div id="signup-popup">
+    <h2>회원가입</h2>
+    <form>
+        <label for="username">사용자 이름:</label><br>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">비밀번호:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <div class="button-container">
+            <!-- type="button"으로 수정하여 폼 제출 방지 -->
+            <button type="button" onclick="signup(event)">가입하기</button>
+            <button type="button" onclick="closePopup()">닫기</button>
+        </div>
+    </form>
+</div>
+
+<!-- 로그인 팝업 -->
+<div id="login-popup">
+    <h2>로그인</h2>
+    <label for="login-username">사용자 이름:</label><br>
+    <input type="text" id="login-username" name="login-username"><br><br>
+    <label for="login-password">비밀번호:</label><br>
+    <input type="password" id="login-password" name="login-password"><br><br>
+    <div class="button-container">
+        <!-- type="button"으로 수정 -->
+        <button type="button" onclick="login(event)">로그인</button>
+        <button type="button" onclick="closePopup()">닫기</button>
+    </div>
+</div>
+
+<div id="make-popup" class="popup">
+    <div class="popup-content">
+        <h2>게시물 만들기</h2>
+        <form>
+            <!-- 사진 업로드 -->
+            <label for="post-image">사진 업로드:</label><br>
+            <input type="file" id="post-image" name="post-image" accept="image/*"><br><br>
+            <input type="hidden" id="imageHidden">
+
+            <!-- 제목 입력 -->
+            <label for="post-title">제목:</label><br>
+            <input type="text" id="post-title" name="post-title"><br><br>
+
+            <label for="animalType">동물 타입:</label>
+            <select id="animalType" name="animalType">
+                <option value="강아지">강아지</option>
+                <option value="고양이">고양이</option>
+                <option value="기타동물">기타동물</option>
+            </select><br><br>
+
+            <!-- 시도군 선택 -->
+            <label for="post-region">시도군 선택:</label>
+            <select id="post-region" name="post-region">
+                <option value="서울시">서울시</option>
+                <option value="인천시">인천시</option>
+                <option value="대전시">대전시</option>
+                <option value="광주시">광주시</option>
+                <option value="대구시">대구시</option>
+                <option value="울산시">울산시</option>
+                <option value="부산시">부산시</option>
+                <option value="경기도">경기도</option>
+                <option value="강원시">강원도</option>
+                <option value="세종시">세종시</option>
+                <option value="충청남도">충청남도</option>
+                <option value="경상북도">경상북도</option>
+                <option value="경상남도">경상남도</option>
+                <option value="전라남도">전라남도</option>
+                <option value="전라북도">전라북도</option>
+                <option value="제주도">제주도</option>
+            </select><br><br>
+
+            <input type="tel" id="importplace" name="importplace" placeholder="대략적인 장소를 입력하세요"><br><br>
+
+            <!-- 연락처 입력 -->
+            <label for="post-contact">연락처:</label><br>
+            <input type="tel" id="post-contact" name="post-contact" placeholder="전화번호를 입력하세요"><br><br>
+
+            <!-- 내용 입력 -->
+            <label for="post-content">내용:</label><br>
+            <textarea id="post-content" name="post-content"></textarea><br><br>
+
+            <input type="hidden" id="accountID" value="1">
+
+            <!-- 버튼 -->
+            <div class="button-container">
+                <button id="makesubmit" type="submit">등록</button>
+                <button type="button" onclick="closePopup()">닫기</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="close-popup">
+    <h2 id="popup-title"></h2>
+    <img id="popup-image" src="" alt="Image" />
+    <p id="popup-location"></p> <!-- countrySiDo 표시 -->
+    <p id="popup-gungu"></p>
+    <p id="popup-breed"></p>
+    <p id="popup-phone"></p>
+    <p id="popup-content"></p>
+
+    <!-- 닫기 버튼 -->
+    <button onclick="closePopup()"><img src="/assets/images/cancel.png" alt="닫기"></button>
+
+    <!-- 채팅 기능 -->
+    <div class="chat">
+        <div id="chat-history"></div>
+        <div id="chat-input-container">
+            <input type="text" id="chat-input" placeholder="메시지를 입력하세요" style="width:80%; padding:5px;" />
+            <button onclick="sendMessage()" id="susubmit">전송</button>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="postId"/>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // 팝업 열기 함수
+        function openPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+            document.getElementById('popup-overlay').style.display = 'block';
+        }
+
+        // 팝업 닫기 함수
+        function closePopup() {
+            var popups = document.querySelectorAll('#signup-popup, #login-popup');
+            popups.forEach(function(popup) {
+                popup.style.display = 'none';
+            });
+            document.getElementById('popup-overlay').style.display = 'none';
+        }
+
+        // 팝업 닫기 버튼 클릭 시 팝업 닫기
+        document.querySelectorAll('.close-popup').forEach(button => {
+            button.addEventListener('click', closePopup);
+        });
+
+        // 게시물 쓰기 버튼 클릭 시 팝업 열기
+        document.getElementById('make-button').addEventListener('click', function() {
+            openPopup('make-popup');
+        });
+
+    });
+    //=========================================
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+
+        // 게시물 데이터를 가져오는 비동기 함수
+        const getData = async () => {
+            const response = await fetch('http://localhost:8080/api/common/noticeboard', {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                return data;
+            } else {
+                const errorText = await response.text();
+                console.error('Error fetching data:', errorText);
+                return [];
+            }
+        };
+
+        // 페이지가 로드되면 게시물 데이터를 가져오기
+        const data = getData();
+
+        data.then((d) => {
+            // 게시물 표시 함수
+            const displayData = (d) => {
+                document.querySelector(".searchbefore").innerHTML = "";
+
+                if (d.length === 0) {
+                    document.querySelector(".searchbefore").innerHTML = "<p>게시물이 없습니다.</p>";
+                    return;
+                }
+                d.forEach((e) => {
+                    const html = `
+                        <div class="preview-container"
+                            data-id="${e.id}"
+                            data-title="${e.title}"
+                            data-image="//localhost:8080/${e.image}"
+                            data-phone="${e.phoneNumber}"
+                            data-animal-type="${e.animalType}"
+                            data-sido="${e.countrySiDo}"
+                            data-gungu="${e.countryGunGu}"
+                            data-importplace="${e.importplace}"
+                            data-content="${e.content}">
+                            <a href="#!">
+                                <p class="user-id">${e.username}</p>
+                                <img src="//localhost:8080/${e.image}" alt="Image Preview">
+                                <div class="info-header">
+                                    <h3>${e.title}</h3>
+                                    <p>${e.phoneNumber}</p>
+                                </div>
+                                <div class="breed-location">
+                                    <p>${e.animalType}</p>
+                                    <p>${e.countrySiDo} ${e.countryGunGu}</p>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                    document.querySelector(".searchbefore").insertAdjacentHTML('afterbegin', html);
+
+                });
+            };
+
+            // 초기 게시물 로드
+            displayData(d);
+
+            // 각 preview-container에 클릭 이벤트 추가
+            const previewContainers = document.querySelectorAll('.preview-container');
+            previewContainers.forEach(container => {
+                container.addEventListener('click', function() {
+                    const data = {
+                        title: this.getAttribute('data-title'),
+                        image: this.getAttribute('data-image'),
+                        phoneNumber: this.getAttribute('data-phone'),
+                        animalType: this.getAttribute('data-animal-type'),
+                        countrySiDo: this.getAttribute('data-sido'),
+                        countryGunGu: this.getAttribute('data-gungu'),
+                        importplace: this.getAttribute('data-importplace'),
+                        content: this.getAttribute('data-content'),
+                        id: this.getAttribute('data-id')
+                    };
+
+                    document.querySelector('#postId').value = data.id;  // data-id를 postId input에 설정
+                    openClosePopup(data); // 해당 데이터로 팝업 열기
+                });
+            });
+
+
+            // 검색 버튼 클릭 시 필터링
+            document.getElementById('search-button').addEventListener('click', () => {
+                const selectedAnimal = document.getElementById('find_animal').value;
+                const selectedRegion = document.getElementById('animal-type').value;
+
+                // 필터링된 데이터
+                const filteredData = d.filter((item) => {
+                    return (item.animalType === selectedAnimal && item.countrySiDo === selectedRegion);
+                });
+
+                displayData(filteredData);  // 필터링된 데이터를 표시
+            });
+        });
+    });
+
+    //===============================================================
+
+    // 회원가입 링크 클릭 시 팝업 열기
+    document.getElementById('signup-link')?.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('signup-popup').style.display = 'block';
+        document.getElementById('popup-overlay').style.display = 'block';
+    });
+
+    // 로그인 링크 클릭 시 팝업 열기
+    document.getElementById('login-link')?.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('login-popup').style.display = 'block';
+        document.getElementById('popup-overlay').style.display = 'block';
+    });
+    // 게시물 만들기 버튼 클릭 시 팝업 열기
+    document.getElementById('make-button')?.addEventListener('click', function(event) {
+    event.preventDefault();
+    document.getElementById('make-popup').style.display = 'block';  // 게시물 만들기 팝업 열기
+    document.getElementById('popup-overlay').style.display = 'block';  // 오버레이 열기
+});
+
+    function closePopup() {
+        document.getElementById('signup-popup').style.display = 'none';
+        document.getElementById('login-popup').style.display = 'none';
+        document.getElementById('make-popup').style.display = 'none';  // 게시물 만들기 팝업 닫기
+        document.getElementById('close-popup').style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+    }
+
+    // 오버레이 클릭 시 팝업 닫기
+    document.getElementById('popup-overlay').addEventListener('click', closePopup);
+
+
+
+
+
+    // 게시물 만들기 (등록 버튼)
+    document.getElementById('makesubmit').addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        const accountID = document.getElementById('accountID').value;
+        const image = document.getElementById('imageHidden').value;
+        const title = document.getElementById('post-title').value;
+        const animalType = document.getElementById('animalType').value;
+        const countrySiDo = document.getElementById('post-region').value;
+        const countryGunGu = document.getElementById('importplace').value;
+        const phoneNumber = document.getElementById('post-contact').value;
+        const content = document.getElementById('post-content').value;
+
+        // 필수 항목 체크
+        if (!title || !animalType || !countrySiDo || !countryGunGu || !phoneNumber || !content) {
+            alert('모든 필드를 입력해주세요.');
+            return;  // 필수 항목이 비어 있으면 게시물 등록을 막음
+        }
+
+        // 추가적인 체크: 이미지가 필수인지 선택인지에 따라 다를 수 있음
+        if (!image) {
+            alert('사진을 업로드해주세요.');
+            return;  // 사진 필수로 설정한 경우
+        }
+
+        const response = await fetch('http://localhost:8080/api/member/noticeboard', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ accountID, image, title, animalType, countryGunGu, countrySiDo, phoneNumber, content })
+        });
+
+       if (response.ok) {
+        alert("게시물이 만들어졌습니다.");
+        location.reload(true);
+    } else {
+        alert('게시물은 회원가입후 만들수 있습니다.');
+    }
+    });
+
+    // 게시물 댓글 로드
+    const loadMessage = async () => {
+        const response = await fetch(`http://localhost:8080/api/common/reply/${document.getElementById('postId').value}`, {
+            method: "GET",
+            credentials: 'include',
+
+        });
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.error('Failed to load messages');
+            return [];
+        }
+    };
+
+    // 팝업 열기 및 데이터 표시
+    function openClosePopup(data) {
+        document.getElementById('popup-title').innerText = data.title;
+        document.getElementById('popup-image').src = data.image;
+        document.getElementById('popup-location').innerText = `시도: ${data.countrySiDo}`;
+        document.getElementById('popup-gungu').innerText = `군구: ${data.countryGunGu}`;
+        document.getElementById('popup-breed').innerText = `동물 타입: ${data.animalType}`;
+        document.getElementById('popup-phone').innerText = `연락처: ${data.phoneNumber}`;
+        document.getElementById('popup-content').innerText = data.content;
+
+        document.getElementById('close-popup').style.display = 'block';
+        document.getElementById('popup-overlay').style.display = 'block';
+
+        // 채팅 데이터 로드
+        const fetchMessage = loadMessage();
+        fetchMessage.then((message) => {
+            const chatHistory = document.getElementById('chat-history');
+
+            let html = '';
+            message.forEach((m) => {
+                html += `<p><strong>${m.username}</strong>: ${m.content}</p>`;
+            });
+
+            chatHistory.innerHTML = html;
+        });
+    }
+
+    // 메시지 저장 함수
+    const saveMessage = async () => {
+        const response = await fetch('http://localhost:8080/api/member/reply', {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                noticeId: document.getElementById('postId').value,
+                content: document.getElementById('chat-input').value
+            })
+        });
+
+        if (response.ok) {
+            alert('댓글이 등록되었습니다.');
+            location.reload();
+        } else {
+            alert('로그인후 사용가능합니다.');
+            console.error('로그인후 사용가능합니다.');
+        }
+    };
+
+    // 메시지 전송 함수
+    function sendMessage() {
+        const message = document.getElementById('chat-input').value;
+        if (message.trim() !== '') {
+            saveMessage();
+        }
+    }
+    document.getElementById('chat-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+
+
+    //========================================================================
+    document.getElementById('post-image').addEventListener('change', function (e) {
+        imageUpload();
+    });
+
+    const imageUpload = async () => {
+        const uploadFile = document.getElementById('post-image').files[0];
+        if (uploadFile) {
+            const formData = new FormData();
+            formData.append('uploadFile', uploadFile);
+
+            const response = await fetch('http://localhost:8080/api/member/uploadAjax', {
+                method: "POST",
+                credentials: 'include',
+                body: formData,
+            });
+
+            if (response.ok) {
+                document.getElementById('imageHidden').value = await response.text();
+            }
+
+        }
+    };
+
+
+</script>
+
+
+<script th:replace="~{fragments :: signup}"></script>
+
+
+
+</body>
+</html>

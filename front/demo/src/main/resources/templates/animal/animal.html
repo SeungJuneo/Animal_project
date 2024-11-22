@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+
+<div id="banner">
+    <a href="#"><img src="/assets/images/safe-Animals.png"></a>
+    <a href="#"><img src="/assets/images/don’t buy.png"></a>
+    <a href="#"><img src="/assets/images/don’t buy (2).png"></a>
+</div>
+
+<div id="text">
+    <div id="slider-container">
+        <!-- 기존 슬라이더 -->
+        <div class="slider">
+            <div class="slide">
+                <img src="/assets/images/post1.png" alt="이미지 1">
+            </div>
+            <div class="slide">
+                <img src="/assets/images/post2.png" alt="이미지 2">
+            </div>
+            <div class="slide">
+                <img src="/assets/images/post3.png" alt="이미지 3" id="mwimg">
+            </div>
+        </div>
+
+        <!-- 추가된 슬라이더 -->
+        <div class="slider">
+            <div class="slide">
+                <img src="/assets/images/post4.png" alt="이미지 4">
+            </div>
+            <div class="slide">
+                <img src="/assets/images/post5.png" alt="이미지 5">
+            </div>
+            <div class="slide">
+                <img src="/assets/images/post6.png" alt="이미지 6">
+            </div>
+        </div>
+    </div>
+
+    <!-- 텍스트가 나올 부분 -->
+    <div id="text-content">
+        <a href="/missing"><h3>실종 동물을 찾습니다!!</h3></a>
+    </div>
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+<!-- 팝업 오버레이 (배경 어두운 영역) -->
+<div id="popup-overlay" style="display:none;" onclick="closePopup()"></div>
+
+<!-- 회원가입 팝업 -->
+<div id="signup-popup">
+    <h2>회원가입</h2>
+    <form>
+        <label for="username">사용자 이름:</label><br>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">비밀번호:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <div class="button-container">
+            <!-- type="button"으로 수정하여 폼 제출 방지 -->
+            <button type="button" onclick="signup(event)">가입하기</button>
+            <button type="button" onclick="closePopup()">닫기</button>
+        </div>
+    </form>
+</div>
+
+<!-- 로그인 팝업 -->
+<div id="login-popup">
+    <h2>로그인</h2>
+    <label for="login-username">사용자 이름:</label><br>
+    <input type="text" id="login-username" name="login-username"><br><br>
+    <label for="login-password">비밀번호:</label><br>
+    <input type="password" id="login-password" name="login-password"><br><br>
+    <div class="button-container">
+        <!-- type="button"으로 수정 -->
+        <button type="button" onclick="login(event)">로그인</button>
+        <button type="button" onclick="closePopup()">닫기</button>
+    </div>
+</div>
+<!-- 가까이보는 팝업 -->
+<div id="close-popup">
+    <h2 id="popup-title"></h2>
+    <img id="popup-image" src="" alt="Image" />
+    <p id="popup-location"></p> <!-- countrySiDo 표시 -->
+    <p id="popup-gungu"></p>
+    <p id="popup-breed"></p>
+    <p id="popup-phone"></p>
+    <p id="popup-content"></p>
+
+    <!-- 닫기 버튼 -->
+    <button onclick="closePopup()"><img src="/assets/images/cancel.png"></button>
+
+    <!-- 채팅 표시 영역 -->
+    <div class="chat">
+        <div id="chat-history"></div>
+
+        <!-- 채팅 입력 영역 -->
+        <div id="chat-input-container">
+            <input type="text" id="chat-input" placeholder="메시지를 입력하세요" style="width:80%; padding:5px;" />
+            <button onclick="sendMessage()" style="padding:5px;" id="susubmit">전송</button>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="postId"/>
+<input type="hidden" id="imageHidden">
+
+<script>
+    // 회원가입 링크 클릭 시 팝업 열기
+    document.getElementById('signup-link')?.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('signup-popup').style.display = 'block';
+        document.getElementById('popup-overlay').style.display = 'block';
+    });
+
+    // 로그인 링크 클릭 시 팝업 열기
+    document.getElementById('login-link')?.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('login-popup').style.display = 'block';
+        document.getElementById('popup-overlay').style.display = 'block';
+    });
+
+    // 팝업 닫기 함수
+    function closePopup() {
+        document.getElementById('signup-popup').style.display = 'none';
+        document.getElementById('login-popup').style.display = 'none';
+        document.getElementById('close-popup').style.display = 'none';
+        document.getElementById('popup-overlay').style.display = 'none';
+    }
+
+    // 오버레이 클릭 시 팝업 닫기
+    document.getElementById('popup-overlay').addEventListener('click', closePopup);
+
+    // 슬라이더 관련 코드
+    let currentSlide1 = 0;
+    let currentSlide2 = 0;
+    const slides1 = document.querySelectorAll('.slider:nth-of-type(1) .slide');
+    const slides2 = document.querySelectorAll('.slider:nth-of-type(2) .slide');
+    const slideCount1 = slides1.length;
+    const slideCount2 = slides2.length;
+
+    function showSlide(slider, slideIndex) {
+        slider.forEach(slide => slide.style.display = 'none');
+        slider[slideIndex].style.display = 'block';
+    }
+
+    function nextSlide(sliderIndex) {
+        if (sliderIndex === 1) {
+            currentSlide1 = (currentSlide1 + 1) % slideCount1;
+            showSlide(slides1, currentSlide1);
+        } else {
+            currentSlide2 = (currentSlide2 + 1) % slideCount2;
+            showSlide(slides2, currentSlide2);
+        }
+    }
+
+    function prevSlide(sliderIndex) {
+        if (sliderIndex === 1) {
+            currentSlide1 = (currentSlide1 - 1 + slideCount1) % slideCount1;
+            showSlide(slides1, currentSlide1);
+        } else {
+            currentSlide2 = (currentSlide2 - 1 + slideCount2) % slideCount2;
+            showSlide(slides2, currentSlide2);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showSlide(slides1, currentSlide1);
+        showSlide(slides2, currentSlide2);
+        setInterval(() => nextSlide(1), 3000);
+        setInterval(() => nextSlide(2), 3000);
+
+        // fetchData 호출
+        fetchData();
+    });
+
+    // ==============================================================
+
+    // 받아온 데이터
+    // ==============================================================
+
+    const getDate = async () => {
+        const response = await fetch('http://localhost:8080/api/common/noticeboard', {
+            method: 'GET'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            console.error('데이터 불러오기 실패');
+            return [];
+        }
+    };
+
+    function fetchData() {
+        getDate().then(data => {
+            if (data && data.length > 0) {
+                const sortedData = data.sort((a, b) => b.id - a.id);
+                const top3Data = sortedData.slice(0, 5);
+
+                top3Data.forEach((e) => {
+                    const html = `
+                        <div class="preview-container" data-id="${e.id}" data-title="${e.title}" data-image="//localhost:8080/${e.image}"data-phone="${e.phoneNumber}" data-animal-type="${e.animalType}" data-location="${e.countrySiDo}" data-gun-gu="${e.countryGunGu}" data-content="${e.content}">
+                            <a href="#!">
+                                <p class="user-id">${e.username}</p>
+                                <img src="//localhost:8080/${e.image}" alt="Image Preview">
+                                <div class="info-header">
+                                    <h3>${e.title}</h3>
+                                    <p>${e.phoneNumber}</p>
+                                </div>
+                                <div class="breed-location">
+                                    <p>${e.animalType}</p>
+                                    <p>${e.countrySiDo} ${e.countryGunGu}</p>
+                                </div>
+                            </a>
+                        </div>`;
+                    document.querySelector("#text-content").innerHTML += html;
+                });
+
+                const previewContainers = document.querySelectorAll(".preview-container");
+                previewContainers.forEach(container => {
+                    container.addEventListener('click', function () {
+                        const postId = this.getAttribute("data-id");
+                        const title = this.getAttribute("data-title");
+                        const image = this.getAttribute("data-image");
+                        const phone = this.getAttribute("data-phone");
+                        const animalType = this.getAttribute("data-animal-type");
+                        const location = this.getAttribute("data-location");
+                        const gunGu = this.getAttribute("data-gun-gu");
+                        const content = this.getAttribute("data-content");
+
+                        // 팝업에 내용 채우기
+                        openClosePopup({
+                            id: postId,  // postId를 추가하여 제대로 팝업에서 사용할 수 있도록 수정
+                            title,
+                            image,
+                            location,
+                            gunGu,
+                            animalType,
+                            phone,
+                            content
+                        });
+
+                        // 팝업 표시
+                        document.getElementById('postId').value = postId;
+                    });
+                });
+            } else {
+                console.log("데이터가 없습니다.");
+            }
+        });
+    }
+
+    // 메시지 로드 함수
+    const loadMessage = async () => {
+        const postId = document.getElementById('postId').value;
+
+        if (!postId) {
+            console.error('postId가 없습니다!');
+            return []; // postId가 없으면 빈 배열 반환
+        }
+
+        const response = await fetch(`http://localhost:8080/api/common/reply/${postId}`, {
+            method: "GET",
+            credentials: 'include',
+        });
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.error('메시지 로드 실패');
+            return []; // 실패시 빈 배열 반환
+        }
+    };
+
+  function openClosePopup(data) {
+    // 데이터가 없으면 종료
+    if (!data || !data.id) {
+        console.error('유효하지 않은 데이터입니다:', data);
+        return;
+    }
+
+    const postId = data.id;
+
+    // 데이터가 없을 경우 기본값 설정
+    const popupTitle = document.getElementById('popup-title');
+    const popupImage = document.getElementById('popup-image');
+    const popupLocation = document.getElementById('popup-location');
+    const popupGungu = document.getElementById('popup-gungu');
+    const popupBreed = document.getElementById('popup-breed');
+    const popupPhone = document.getElementById('popup-phone');
+    const popupContent = document.getElementById('popup-content');
+
+    // 기본값 처리
+    popupTitle.innerText = data.title || '제목 없음';
+    popupImage.src = data.image || '/assets/images/default-image.jpg';  // 기본 이미지 설정
+    popupLocation.innerText = `시도: ${data.location || 'N/A'}`;
+    popupGungu.innerText = `군구: ${data.gunGu || 'N/A'}`;
+    popupBreed.innerText = `동물 타입: ${data.animalType || 'N/A'}`;
+    popupPhone.innerText = `연락처: ${data.phone || 'N/A'}`;
+    popupContent.innerText = data.content || '내용 없음';
+
+    // 팝업 표시
+    document.getElementById('postId').value = postId;
+    document.getElementById('close-popup').style.display = 'block';
+    document.getElementById('popup-overlay').style.display = 'block';
+
+    // 채팅 데이터 로드
+    loadMessage().then((messages) => {
+        const chatHistory = document.getElementById('chat-history');
+        let html = '';
+        messages.forEach((m) => {
+            html += `<p><strong>${m.username}</strong>: ${m.content}</p>`;
+        });
+        chatHistory.innerHTML = html;
+    }).catch((error) => {
+        console.error('메시지 로딩 중 오류 발생', error);
+    });
+}
+
+    // 메시지 저장 함수
+    const saveMessage = async () => {
+        const postId = document.getElementById('postId').value;
+        const messageContent = document.getElementById('chat-input').value.trim();
+
+        if (!postId || !messageContent) {
+            alert('메시지 내용이 비어있거나 유효하지 않습니다.');
+            return; // postId 또는 내용이 비어있으면 전송하지 않음
+        }
+
+        const response = await fetch('http://localhost:8080/api/member/reply', {
+    method: "POST",
+    headers: {
+        'Content-type': 'application/json'
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+        noticeId: postId,
+        content: messageContent
+    })
+});
+
+        if (response.ok) {
+            alert('댓글이 등록되었습니다.');
+            loadMessage(); // 메시지가 등록되면 다시 메시지 목록을 불러옴
+            location.reload();
+        } else {
+            alert('로그인후 사용가능합니다.');
+            console.error('로그인후 사용가능합니다.');
+        }
+    };
+
+    function sendMessage() {
+        const message = document.getElementById('chat-input').value;
+        if (message.trim() !== '') {
+            saveMessage(); // 비어있지 않으면 메시지 전송
+        } else {
+            alert('메시지 내용이 비어있습니다.');
+        }
+    }
+    document.getElementById('chat-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+
+
+    //========================================================================
+   const imageUpload = async () => {
+    const uploadFile = document.getElementById('post-image').files[0];
+    if (uploadFile) {
+        const formData = new FormData();
+        formData.append('uploadFile', uploadFile);
+
+        const response = await fetch('http://localhost:8080/api/member/uploadAjax', {
+            method: "POST",
+            credentials: 'include',
+            body: formData,
+        });
+
+        if (response.ok) {
+            // 서버가 반환하는 경로가 /uploads/images/myimage.jpg라면
+            const imageUrl = await response.text();
+            // 서버 URL을 결합하여 전체 URL을 만들기
+            const fullImageUrl = `http://localhost:8080${imageUrl}`;
+            document.getElementById('imageHidden').value = fullImageUrl;
+        } else {
+            alert('이미지 업로드 실패');
+        }
+    }
+    }
+</script>
+
+<script th:replace="~{fragments :: signup}"></script>
+
+
+
+</body>
+</html>

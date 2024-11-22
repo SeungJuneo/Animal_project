@@ -1,0 +1,155 @@
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동물 보호 사이트</title>
+    <link rel="stylesheet" href="/assets/css/animal.css">
+</head>
+
+<header th:fragment="header">
+    <div id="toptop">
+        <ul>
+            <li><a href="#" id="signup-link"><img src="/assets/images/login.png" alt="회원가입">회원가입</a></li>
+            <li id="loginLink"><a href="#" id="login-link"><img src="/assets/images/lock.png" alt="로그인">로그인</a></li>
+            <li><a href="#" id="logout-link" onclick="logout(event);"><img src="/assets/images/logout.png" alt="로그아웃" >로그아웃</a></li>
+        </ul>
+    </div>
+    <div id="toptop2">
+        <a href="https://smc.sen.hs.kr/"><img src="/assets/images/semyeong.png" id="semyong" alt="세명"></a>
+        <div id="maintitle-container">
+            <a href="/" id="maintitle">동물 보호 사이트</a>
+        </div>
+        <ul id="hdli">
+            <li><a href="/missing">실종 동물 찾기</a></li>
+            <li><a href="https://luppyworld.com/">후원하기</a></li>
+        </ul>
+    </div>
+
+    <script>
+        const logout = async (e) => {
+            e.preventDefault();
+            const response = await fetch('http://localhost:8080/api/member/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                alert('로그아웃 되었습니다.');
+                location.reload();
+            }
+        }
+
+        const checkLogin = async () => {
+            const response = await fetch('http://localhost:8080/api/common/is-login', {
+                method: "GET",
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                const result = await response.text();
+
+                if (result === 'false') { // 로그아웃일 때
+                    document.querySelector('#logout-link').style='display: none;'
+                    document.querySelector('#signup-link').style='display: block;'
+                    document.querySelector('#login-link').style='display: block;'
+                } else {
+                    const newElement = document.createElement('li');
+                    newElement.textContent = result + '님';
+
+                    document.querySelector('#loginLink').insertAdjacentElement('afterend', newElement);
+                    document.querySelector('#logout-link').style='display: block;'
+                    document.querySelector('#signup-link').style='display: none;'
+                    document.querySelector('#login-link').style='display: none;'
+                }
+            }
+        }
+
+        checkLogin();
+    </script>
+</header>
+
+<footer th:fragment="footer">
+    <div id="foot">
+        <div><a href="https://smc.sen.hs.kr/"><img src="/assets/images/semyeong_footer.png" id="semyeong_footer" alt="세명"></a></div>
+        <div><span>
+                [03337]서울 은평구 통일로92가길 33 (불광동, 세명컴퓨터고등학교)<br>
+                Copyright ⓒ 2021 semyeong computer high school. All Rights Reserved.
+            </span></div>
+        <div><a href="https://www.animals.or.kr/center/essay/55300"><img src="/assets/images/animalfree.jpg" alt="동물 보호"></a></div>
+    </div>
+</footer>
+
+<script th:fragment="signup">
+    // 회원가입 함수
+    const signup = async(e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (username.length < 3) {
+            alert('아이디는 3글자 이상이어야 합니다.');
+            return;
+        }
+
+        const passwordRegex = /^(?=.*[!@#$%^&*])[A-Za-z\d@$!%*?&]{7,}$/;
+
+        if (!passwordRegex.test(password)) {
+            alert('비밀번호는 최소 7글자 이상이어야 하며, 특수문자를 포함해야 합니다.');
+            return;
+        }
+
+        const response = await fetch("http://localhost:8080/api/common/account", {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert(`${data.username}님 회원가입을 축하드립니다!`);
+
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            closePopup();
+        } else {
+            const data = await response.text();
+            alert(data);
+        }
+    }
+
+    // 로그인 함수
+    const login = async(e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+
+        const response = await fetch("http://localhost:8080/api/common/login", {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.text();
+            alert('로그인 되었습니다.');
+
+            location.reload();
+        } else {
+            const data = await response.text();
+            alert(data);
+        }
+    }
+</script>

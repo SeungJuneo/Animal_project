@@ -1,0 +1,796 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#toptop>ul>li>a:hover,#hdli>li>a:hover{
+    color: #fa7d7d;
+
+}
+body {
+    height:500px;
+    font-family: Arial, sans-serif;
+    padding-top: 200px;
+    padding-left: 200px;
+    padding-right: 200px;
+}
+
+/* 헤더 스타일 */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 50px;
+    background-color: rgb(255, 255, 255);
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+#toptop {
+    text-align: right;
+}
+
+#toptop ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#toptop li {
+    margin-left: 30px;
+}
+
+#toptop a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+#toptop a img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+}
+
+/* 회원가입 팝업 스타일 */
+#signup-popup,
+#login-popup {
+    display: none; /* 처음엔 숨김 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#popup-overlay {
+    display: none; /* 처음엔 숨김 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+#signup-popup button,
+#login-popup button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    width: 100%;
+    background-color: #fa7d7d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#signup-popup button:hover,
+#login-popup button:hover {
+    background-color: #d96b6b;
+}
+
+
+#login-password,#login-username,#username,#password{
+    width: 100%;
+    height: 30px;
+
+}
+
+/* 헤더 메뉴 스타일 */
+#toptop2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#semyong {
+    width: 70px;
+    height: 70px;
+}
+#safe-Animals{
+    width: 500px;
+
+}
+
+#maintitle-container {
+    text-align: center;
+    flex-grow: 1;
+}
+
+#maintitle {
+    color: black;
+    font-weight: bold;
+    font-size: 30px;
+    text-decoration: none;
+}
+
+#undertext {
+    text-align: center;
+}
+
+/* 헤더 메뉴 가로 정렬 및 점 없애기 */
+#hdli {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+#hdli li {
+    margin-right: 30px; /* 항목 간 여백 */
+}
+
+#hdli li:first-child {
+    margin-left: 0; /* 첫 번째 항목에만 왼쪽 여백 제거 */
+}
+
+#hdli a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+#hdli a img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+}
+/*배너 3개*/
+#banner{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+#banner>a{
+    margin-left: 10px;
+
+}
+#banner>a>img{
+    width: 500px;
+    height: auto;
+}
+
+/* ===============================================================================배너 아래 */
+
+/* 텍스트와 슬라이더를 나란히 배치 */
+#text {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* 슬라이더가 포함된 컨테이너 */
+#slider-container {
+    display: flex;
+    flex-direction: column; /* 슬라이더가 세로로 배치되도록 */
+    gap: 20px; /* 슬라이더 간 간격 */
+
+}
+
+/* 텍스트가 포함된 영역 */
+#text-content {
+    margin-left: 40px;
+    width: 35%; /* 텍스트 영역의 너비 설정 */
+    padding: 20px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+#text-content h3 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    text-decoration-line:none ;
+    margin-bottom: 20px;
+
+}
+
+#text-content p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 슬라이더 스타일 */
+
+/* 슬라이더 크기를 #mwimg와 동일하게 설정 *//* 슬라이더 컨테이너 */
+#slider-container {
+    display: flex;
+    flex-direction: column; /* 슬라이더가 세로로 배치되도록 */
+    gap: 20px; /* 슬라이더 간 간격 */
+
+}
+
+/* 슬라이더 스타일 */
+.slider {
+    overflow: hidden;
+    position: relative;
+    width: 400px;  /* mwimg의 너비와 동일하게 설정 */
+    height: 550px; /* mwimg의 높이와 동일하게 설정 */
+    margin-bottom: 20px; /* 슬라이더 간 간격 */
+}
+
+.slide {
+    width: 100%; /* 슬라이드의 너비를 100%로 설정하여 슬라이더 크기와 맞춤 */
+    height: 100%; /* 슬라이드의 높이를 100%로 설정하여 크기를 맞춤 */
+    display: flex;
+    position: relative;
+}
+
+.slide > img {
+    width: 100%;  /* 슬라이드 이미지를 슬라이더 크기에 맞춤 */
+    height: 100%; /* 슬라이드 이미지를 슬라이더 크기에 맞춤 */
+    object-fit: cover; /* 이미지를 슬라이더 크기에 맞게 잘라서 맞춤 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 텍스트가 포함된 영역 */
+#text-content {
+    width: 50%; /* 텍스트 영역의 너비를 50%로 설정 */
+    padding: 20px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+#text-content h3 {
+    font-size: 24px;
+    color: #333;
+}
+
+#text-content p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 실종 동물 찾기 텍스트와 검색창 스타일 */
+/* ============================================================================================================================ */
+.searchbefore {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.preview-container {
+    width: 48%; /* 2개씩 나란히 배치 */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: none; /* 기본적으로 숨겨짐 */
+}
+
+.preview-container a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.page-btn {
+    padding: 10px;
+    margin: 0 5px;
+    background-color: #fa7d7d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.page-btn:hover {
+    background-color: #d96b6b;
+}
+
+/* ============================================================================================================================= */
+#search-container {
+    display: flex;
+    justify-content: flex-start; /* 기본적으로 왼쪽 정렬 */
+    align-items: center; /* 세로 정렬 */
+
+    margin-bottom: 10px;
+    padding: 0 50px; /* 왼쪽, 오른쪽 여백 */
+}
+
+#make-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #858585;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#make-button:hover {
+    background-color: #fa7d7d;
+}
+
+#search-container > #writediv {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+}
+
+#search-container>label {
+    margin: 10px;
+}
+
+#search-container > div > select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#search-container > button#search-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #858585;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#search-container > button#search-button:hover {
+    background-color: #fa7d7d;
+}
+
+/* 푸터 스타일 */
+footer {
+    margin-top: 70px;
+    background-color: #f8f8f8;
+    padding: 30px 50px;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+footer #foot {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto; /* 좌우 여백을 자동으로 설정하여 중앙 정렬 */
+    text-align: center;
+}
+
+footer img {
+    object-fit: cover;
+}
+
+footer div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer div span {
+    font-size: 14px;
+    color: #333;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+/* ============================================= */
+
+/* 그그그 설명 그거 작은거임 */
+/* preview-container를 중앙에 배치 */
+.preview-container {
+    width: 80%; /* 너비를 줄여서 양옆에 여백을 추가 */
+    max-width: 600px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: left;
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 15px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+
+.preview-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.preview-container p {
+    margin: 5px 0;
+    color: #555;
+}
+
+/* 아이디를 오른쪽에 배치 */
+.preview-container .user-id {
+    text-align: right;
+    font-size: 14px;
+    color: #333;
+}
+
+/* 강아지 제목과 전화번호를 나란히 배치 */
+.preview-container .info-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.preview-container .info-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    flex: 1;  /* 강아지 제목은 남은 공간을 차지 */
+}
+
+.preview-container .info-header p {
+    margin: 0;
+    font-size: 14px;
+    color: #007BFF; /* 전화번호 색상 */
+    white-space: nowrap;
+}
+
+/* 치와와와 서울시 나란히 배치 */
+.preview-container .breed-location {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.preview-container .views {
+    text-align: right;
+    font-size: 14px;
+    color: #777;
+}
+
+.preview-container a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ==================================================================== */
+
+
+  /* 팝업 및 오버레이 스타일 */
+  #post-content {
+    resize: none;
+    width: 100%;
+    height: 100px; /* 원하는 높이로 조정 */
+}
+#make-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+
+#make-popup>h2{
+    margin-bottom: 20px;
+}
+
+#popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+
+.button-container button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    width: 100%;
+    background-color: #fa7d7d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.button-container button:hover {
+    background-color: #d96b6b;
+}
+
+
+/* =================================================================================== */
+
+
+#popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 10;
+}
+
+/* 팝업 및 오버레이 스타일 */
+#make-popup {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#popup-overlay {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+    z-index: 999;
+}
+
+/* 팝업 열렸을 때 보이게 설정 */
+#make-popup.show, #popup-overlay.show {
+    display: block;
+}
+/* =========================================== */
+/* 팝업의 기본 상태는 보이지 않도록 설정 */
+
+
+/* 전체 팝업 컨테이너 */
+#close-popup {
+    width: 90%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 1001;
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+    max-height: 80vh; /* 화면 크기에 맞게 팝업 크기 조정 */
+    background-color: #f9f9f9;
+}
+
+/* 팝업 제목 */
+#popup-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
+}
+
+/* 이미지 스타일 */
+#popup-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+/* 텍스트 정보 스타일 */
+#popup-location,
+#popup-gungu,
+#popup-breed,
+#popup-phone,
+#popup-content {
+    font-size: 14px;
+    color: #555;
+    margin: 10px 0;
+}
+
+/* 위치, 구체적인 정보는 조금 더 강조 */
+#popup-location,
+#popup-phone {
+    font-weight: bold;
+    color: #333;
+}
+
+/* 닫기 버튼 */
+#close-popup button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    top: 3px;
+    right: 10px;
+}
+
+/* 채팅 영역 */
+.chat {
+    margin-top: 20px;
+    background-color: #fafafa;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#chat-history {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding-right: 10px;
+}
+
+#chat-history p {
+    background-color: #e0e0e0;
+    padding: 8px;
+    border-radius: 10px;
+    margin: 5px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#chat-history p strong {
+    color: #333;
+}
+
+/* 채팅 입력 영역 */
+#chat-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#chat-input {
+    width: 80%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#chat-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+#chat-input-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    bottom:10px;
+}
+
+#chat-input-container button:hover {
+    background-color: #0056b3;
+}
+
+/* 오버레이 (배경 어두운 부분) */
+#popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+}
+
+/* 스크롤바 스타일 (채팅 히스토리 부분) */
+#chat-history::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-history::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+#chat-history::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+#susubmit{
+    width: 60px;
+    height: 30px;
+
+}
+
+/* ============================closepopup */
+#closetext{
+    word-wrap: break-word;
+    white-space: normal;
+}
+#close-popup>button>img{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    right: 13px;
+    width: 15px;
+
+}
+#chat-history{
+    border:1px solid #ccc;
+    padding:10px; height:200px;
+    overflow-y:scroll
+}
+#chat-input-container{
+   display: flex;
+       align-items: center;
+       justify-content: flex-start;
+       position: relative;
+}
